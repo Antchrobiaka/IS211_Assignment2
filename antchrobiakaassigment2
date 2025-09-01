@@ -1,0 +1,83 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "5b05d560-9c9c-4559-a620-6517f9f660b0",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Person #1 is Felicity Churchill with a birthday of 1983-11-09\n"
+     ]
+    }
+   ],
+   "source": [
+    "import logging\n",
+    "import datetime\n",
+    "\n",
+    "def downloadData():\n",
+    "    \"\"\"Returns hardcoded test data.\"\"\"\n",
+    "    return \"\"\"id,name,birthday\n",
+    "1,Felicity Churchill,09/11/1983\n",
+    "\n",
+    "def processData(file_content):\n",
+    "    \"\"\"Processes the file content and returns a dictionary of data indexed by ID.\"\"\"\n",
+    "    data_dict = {}\n",
+    "    lines = file_content.strip().split('\\n')\n",
+    "    \n",
+    "    for i, line in enumerate(lines[1:], 2):\n",
+    "        try:\n",
+    "            id_str, name, birthdate_str = line.strip().split(',')\n",
+    "            birthdate = datetime.datetime.strptime(birthdate_str, \"%d/%m/%Y\")\n",
+    "            data_dict[int(id_str)] = (name, birthdate)\n",
+    "        except ValueError as e:\n",
+    "            logging.error(f\"Error processing line #{i}: {line}\")\n",
+    "            logging.error(f\"Exception: {e}\")\n",
+    "    \n",
+    "    return data_dict\n",
+    "\n",
+    "def displayPerson(id, personData):\n",
+    "    \"\"\"Prints out the person's name and birthdate from the dictionary.\"\"\"\n",
+    "    if id in personData:\n",
+    "        name, birthdate = personData[id]\n",
+    "        print(f\"Person #{id} is {name} with a birthday of {birthdate.strftime('%Y-%m-%d')}\")\n",
+    "    else:\n",
+    "        print(f\"No user found with ID {id}\")\n",
+    "\n",
+    "def main():\n",
+    "    logging.basicConfig(filename='errors.log', level=logging.ERROR)\n",
+    "    csv_data = downloadData()\n",
+    "    person_data = processData(csv_data)\n",
+    "\n",
+    "    displayPerson(1, person_data)\n",
+    "\n",
+    "if __name__ == \"__main__\":\n",
+    "    main()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "anaconda-2024.02-py310",
+   "language": "python",
+   "name": "conda-env-anaconda-2024.02-py310-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.14"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
